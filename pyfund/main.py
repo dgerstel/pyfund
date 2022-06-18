@@ -22,6 +22,7 @@ ASSET_AND_UNIT = {
 @dataclass
 class Asset:
     """Asset with its unit and current price."""
+
     name: AssetEnum
     current_price: Optional[int] = None
 
@@ -47,6 +48,7 @@ class Currency(Enum):
 @dataclass
 class Purchase:
     """Represents a purchase of an asset."""
+
     asset_enum: AssetEnum
     price: float
     account: Account = Account.UNKNOWN
@@ -58,13 +60,16 @@ class Purchase:
         self.asset: Asset = Asset(self.asset_enum)
 
     def __repr__(self):
-        return f"On {self.date} you bought {self.qty} {self.asset.unit.value} of {self.asset} for {self.price} {self.currency.value} "\
-               + f"using your {self.account.value} account."
+        return (
+            f"On {self.date} you bought {self.qty} {self.asset.unit.value} of {self.asset} for {self.price} {self.currency.value} "
+            + f"using your {self.account.value} account."
+        )
 
 
 @dataclass
 class History:
     """History is a list of purchases."""
+
     purchase_arr: Sequence[Purchase]
 
     def __repr__(self):
