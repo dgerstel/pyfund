@@ -1,0 +1,19 @@
+currencies:
+  - EUR
+  - USD
+
+accounts:
+  - SuperBroker
+  - DEGIRO
+  - UNKNOWN
+
+assets:
+  - gold
+  - silver
+
+units:
+  - oz
+
+asset_to_unit:
+  gold: oz
+  silver: oz

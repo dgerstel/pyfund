@@ -1,22 +1,19 @@
 import datetime
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional, Sequence
+from enum import Enum
+import sys
+print(sys.path)
+from pyfund.config import config
 
 
-class AssetEnum(Enum):
-    GOLD = "gold"
-    SILVER = "silver"
-
-
-class Unit(Enum):
-    OZ = "oz"
-
-
-ASSET_AND_UNIT = {
-    AssetEnum.GOLD: Unit.OZ,
-    AssetEnum.SILVER: Unit.OZ,
-}
+enum_dict = {}
+for k, v in vars(config).items():
+    enum_dict[k] = {a.upper(): a for a in v}
+AssetEnum = Enum("Assets", enum_dict["assets"])
+Account = Enum("Account", enum_dict["accounts"])
+Currency = Enum("Currency", enum_dict["currencies"])
+ASSET_AND_UNIT = {a: config.asset_to_unit[a] for a in config.assets}
 
 
 @dataclass
@@ -27,22 +24,11 @@ class Asset:
     current_price: Optional[int] = None
 
     def __post_init__(self):
-        self.unit = ASSET_AND_UNIT[self.name]
+        print("For name", self.name, "TYpe of name:", type(self.name))
+        self.unit = config.asset_to_unit[self.name.value]
 
     def __repr__(self):
         return self.name.value
-
-
-class Account(Enum):
-    UNKNOWN = "UNKNOWN"
-    SUPERBROKER = "SuperBroker"
-    DEGIRO = "DEGIRO"
-
-
-class Currency(Enum):
-    EUR = "EUR"
-    USD = "usd"
-    PLN = "pln"
 
 
 @dataclass
@@ -61,7 +47,7 @@ class Purchase:
 
     def __repr__(self):
         return (
-            f"On {self.date} you bought {self.qty} {self.asset.unit.value} of {self.asset} for {self.price} {self.currency.value} "
+            f"On {self.date} you bought {self.qty} {self.asset.unit} of {self.asset} for {self.price} {self.currency.value} "
             + f"using your {self.account.value} account."
         )
 
@@ -89,6 +75,8 @@ def main():
     h = History([p, p2])
     print(h)
     print(h.total_cost())
+
+    print(config.assets)
 
 
 if __name__ == "__main__":
