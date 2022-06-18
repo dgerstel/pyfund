@@ -12,7 +12,6 @@ class Config:
     currencies: List[str]
     accounts: List[str]
     assets: List[str]
-    units: List[str]
     asset_to_unit: Dict[str, str]
 
 
